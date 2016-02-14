@@ -19,11 +19,17 @@
  //your solution file is located.
  
 
+var spawn = require('child_process').spawn;
+var duplexer2 = require('duplexer2');
 
-         var spawn = require('child_process').spawn;
-             
-         module.exports = function (cmd, args) {
-                     // spawn the process and return a single stream
-             //         // joining together the stdin and stdout here
-             //             
-         };
+module.exports = function (cmd, args) {
+     // spawn the process and return a single stream
+     var ps = spawn(cmd, args);
+     // joining together the stdin and stdout here
+     /* 
+      *  note:
+      *  • ps.stdin  = Stream object( Writable )
+      *  • ps.stdout = Stream object ( Readble )  
+      */
+     return duplexer2(ps.stdin, ps.stdout);
+};
